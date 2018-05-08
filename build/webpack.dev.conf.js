@@ -9,6 +9,48 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const portfinder = require('portfinder')
+//配置vue-resource
+ const express = require('express')
+const app = express()
+var appData = require('../db.json')//加载本地数据文件
+var seller = appData.seller//获取对应的本地数据
+var goods = appData.goods
+var ratings = appData.ratings
+var apiRoutes = express.Router()
+app.use('/api', apiRoutes)
+// var app = express()
+// var bodyParser = require('body-parser')
+// app.use(bodyParser.urlencoded({ extended: true }))
+// app.use(bodyParser.json())
+// var apiRouter = express.Router()
+// var fs = require('fs')
+// apiRouter.route('/:apiName')
+// .all(function (req, res) {
+//   fs.readFile('../db.json', 'utf8', function (err, data) {
+//     if (err) throw err
+//     var data = JSON.parse(data)
+//     if (data[req.params.apiName]) {
+//       res.json(data[req.params.apiName])
+//     }
+//     else {
+//       res.send('no such api name')
+//     }
+
+//   })
+// })
+
+// app.use('/api', apiRouter);
+// app.listen(8081, function (err) {
+//   if (err) {
+//     console.log(err)
+//     return
+//   }
+//   console.log('Listening at http://localhost:' + (8081) + '\n')
+// })
+
+
+
+
 
 const HOST = process.env.HOST
 const PORT = process.env.PORT && Number(process.env.PORT)
@@ -22,6 +64,26 @@ const devWebpackConfig = merge(baseWebpackConfig, {
 
   // these devServer options should be customized in /config/index.js
   devServer: {
+   before(app) {
+      app.get('/api/seller', (req, res) => {
+        res.json({
+          errno: 0,
+          data: seller
+        })//接口返回json数据，上面配置的数据seller就赋值给data请求后调用
+      }),
+      app.get('/api/goods', (req, res) => {
+        res.json({
+          errno: 0,
+          data: goods
+        })
+      }),
+      app.get('/api/ratings', (req, res) => {
+        res.json({
+          errno: 0,
+          data: ratings
+        })
+      })
+    },
     clientLogLevel: 'warning',
     historyApiFallback: {
       rewrites: [

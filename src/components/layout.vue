@@ -4,9 +4,9 @@
       <div class="container">
         <img src="../assets/img2.png" />
         <ul class="nav-list">
-          <li>登录</li>
-          <li>注册</li>
-          <li>关于</li>
+          <li @click="logClick">登录</li>
+          <li @click="regClick">注册</li>
+          <li @click="aboutClick">关于</li>
         </ul>
       </div>
      
@@ -19,9 +19,48 @@
     <footer class="app-foot">
       <p>@ 2018 fishenal mit</p>
     </footer>
+    <my-dialog :is-show="isShowAboutDialog" @on-close="closeDialog('isShowAboutDialog')">
+      <p>本报告在调研数据的基础上，采用定性与定量相结合的方式深入分析了专车市场发展的驱动因素与阻碍因素、专车市场背后的产业格局、专车企业的竞争格局、
+        用户对专车市场的依赖程度、专车对其他交通工具运力的补充效应等，通过这五个章节的研究反映专车市场的发展态势和面临的问题。报告力求客观、深入、
+        准确地反映中国专车市场发展情况，为政府、企事业单位和社会各界提供决策依据。 </p>
+    </my-dialog>
+    <my-dialog :is-show="isShowLogDialog" @on-close="closeDialog('isShowLogDialog')">
+      登陆
+    </my-dialog>
+    <my-dialog :is-show="isShowRegDialog" @on-close="closeDialog('isShowRegDialog')">
+     注册
+    </my-dialog>
   </div>
 </template>
-
+<script>
+import Dialog from './dialog'
+export default{
+  components:{
+    MyDialog:Dialog
+  },
+  data(){
+    return {
+       isShowAboutDialog: false,
+      isShowLogDialog: false,
+      isShowRegDialog: false,
+    }
+  },
+  methods:{
+   aboutClick() {
+      this.isShowAboutDialog = true;
+    },
+    logClick(){
+      this.isShowLogDialog = true;
+    },
+    regClick(){
+      this.isShowRegDialog = true;
+    },
+    closeDialog(attr){
+      this[attr] = false;
+    },
+  }
+}
+</script>
 <style>
 html,
 body {

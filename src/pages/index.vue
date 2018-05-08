@@ -21,7 +21,7 @@
         <h2>最新消息</h2>
       <div class="left-nav">
         <ul>
-          <li v-if="newsList" v-for="item in newsList">
+          <li v-if="newsList" v-for="item in newsList" class="new_item">
             <a :href="item.url">{{item.title}}</a>
           </li>
         </ul>
@@ -31,7 +31,7 @@
      
    </div>
    <div class="rightbox">
-     <div>轮播</div>
+     <slide-show :slides="slides" :inv="slideSpeed"></slide-show>
    <div>
      <div class="boadlist" v-if="boardList" v-for="(item,index) in boardList" :class="[{'line-box':index%2!==0},'img'+item.id]">
        <div class="imgbox" ></div>
@@ -46,10 +46,45 @@
   </div>
 </template>
 <script>
+import slideShow from '../components/slideShow'
 export default {
+  components:{slideShow},
     name: 'IndexPages',
+    created:function(){
+      this.$http.get('api/seller')
+      .then((data)=>{
+        console.log(data.data)
+        this.newsList=data.data.data.newsList
+
+      },(err)=>{
+console.log(err)
+      })
+    },
   data () {
     return {
+      slideSpeed:2000,
+      slides:[
+        {
+          src:require("../assets/img/slide1.jpg"),
+          title:'xxx1',
+          href:'http://vuex.vuejs.org/'
+        },
+         {
+          src:require("../assets/img/slide2.jpg"),
+          title:'xxx2',
+          href:'http://vue-loader.vuejs.org/'
+        },
+         {
+          src:require("../assets/img/slide3.jpg"),
+          title:'xxx3',
+          href:'http://router.vuejs.org/'
+        },
+         {
+          src:require("../assets/img/slide4.jpg"),
+          title:'xxx4',
+          href:'https://github.com/vuejs/awesome-vue'
+        }
+      ],
       boardList:[
         {
           title:"开放产品",
@@ -75,23 +110,7 @@ export default {
         }
       ],
       newsList:[
-        {
-                title:"数据统计",
-                url:""
-              },
-              {
-                title:"数据预测",
-                url:"",
-                hot:true
-              },
-              {
-                title:"流量分析",
-                url:""
-              },
-              {
-                title:"广告发布",
-                url:""
-              }
+       
       ],
       productList:{
           pc:{
@@ -229,5 +248,12 @@ export default {
   color:#fff;
   background:blue;
   border:0;
+}
+.new_item{
+  width:190px;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space:nowrap;
 }
 </style>
